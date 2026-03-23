@@ -31,3 +31,13 @@ My AI practice projects
   - pd.concat(): 行方向および列方向へのデータの単純連結。
   - pd.merge(): SQLライクな結合（Inner, Left, Right, Outer）の実践。
   - 実データ演習: SQLite3 を使用し、データベースからのデータ読み込みと、複数テーブルを紐付けた集計処理の自動化。
+
+
+本日の学習進捗（2026/03/23）
+今回追加した内容:欠損値処理 (Missing Value Handling)
+  - 判定: `isnull()` や `isna()` を用いた正確なデータステータスの把握。
+  - 可視化: `missingno` ライブラリを使用した欠損データの分布と相関の分析。
+  - 戦略的処理:
+      - リストワイズ削除（dropna）
+      - 統計量（平均値など）による代入法
+      - 時系列データにおける線形補間（Interpolation）
