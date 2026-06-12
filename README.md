@@ -7,7 +7,7 @@
 - One-Hot Encodingの実装
 - Word2Vec（CBOW・Skip-Gram）の基礎
 
-# 文本预处理与数据分析（Day 02—03）
+# テキスト前処理とデータ分析（Day 02—03）
 
 **Word2Vec（Skip-Gram）の基礎**
 
