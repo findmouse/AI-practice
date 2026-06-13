@@ -1,4 +1,4 @@
-# 2026/6/10）
+# (2026/6/10）
 - NLP基礎概念と応用例
 - jiebaによる中国語分かち書き
 - ユーザー辞書の利用
@@ -9,23 +9,23 @@
 
 # テキスト前処理とデータ分析（2026/6/11,12）
 
-**Word2Vec（Skip-Gram）の基礎**
+Word2Vec（Skip-Gram）の基礎
 
 - 指定したウィンドウ幅の周辺単語を、中心単語から予測する词向量（単語ベクトル）表現手法。
 
-**FastTextによる単語ベクトルの学習と保存**
+FastTextによる単語ベクトルの学習と保存
 
 - `fasttext` ライブラリを用いた無監督学習（単語ベクトルの訓練、バイナリ形式での保存、およびモデルの読み込みフロー）。
 
-**Word Embedding（PyTorch）の実装**
+Word Embedding（PyTorch）の実装
 
 - `jieba` による分かち書き、テキストの数値化（ID化）、`nn.Embedding` 層を用いた密なベクトルへのマッピング。
 
-**TensorBoardによる単語ベクトルの可視化**
+TensorBoardによる単語ベクトルの可視化
 
 - `SummaryWriter` を用いて埋め込み行列を出力し、TensorBoard上で単語間の類似度を視覚的に確認する方法。
 
-**ラベル分布の確認（データ不均衡分析）**
+ラベル分布の確認（データ不均衡分析）
 
 - `sns.countplot` を用いた正負サンプルの割合統計。モデル評価（ACC）の基準調整やデータ拡張の必要性の判断。
 
@@ -47,11 +47,11 @@
 
 
 
-## NLP・RNN学習ノート（2026年6月13日）
+# NLP・RNN学習ノート（2026年6月13日）
 
 本日学習した自然言語処理（NLP）関連の講義内容は以下の通りです。
 
-* **ワードクラウド（Word Cloud）
-* **特徴量エンジニアリング（Feature Engineering）
-* **テキストの前処理（Preprocessing）
-* **ディープラーニング（Deep Learning）
+* ワードクラウド（Word Cloud）
+* 特徴量エンジニアリング（Feature Engineering）
+* テキストの前処理（Preprocessing）
+* ディープラーニング（Deep Learning）
