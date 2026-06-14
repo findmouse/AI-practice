@@ -70,6 +70,7 @@ def generate_word_clouds():
 
     # ポジティブデータから形容詞を抽出（リストのフラット化）
     positive_adjectives = list(chain(*map(lambda x: extract_adjectives(x), positive_data)))
+    print(f'positive_adjectives-->{positive_adjectives}')
     print(f'[INFO] positive_adjectives count: {len(positive_adjectives)}')
 
     # ワードクラウドの生成
