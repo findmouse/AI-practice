@@ -55,3 +55,17 @@ TensorBoardによる単語ベクトルの可視化
 * 特徴量エンジニアリング（Feature Engineering）
 * テキストの前処理（Preprocessing）
 * ディープラーニング（Deep Learning）
+
+# RNN・base（2026年6月15日）
+
+RNNのコードに実装
+
+# LSTM/GRU（2026年6月1６日）
+
+LSTM・GRUのコードに実装
+
+
+
+# RNN/LSTM/GRU（2026年6月17・１８日）
+
+文字レベル（Character-level）のリカレントニューラルネットワーク（RNN, LSTM, GRU）を用いて、入力された名前（文字列）からその人物の国籍（18カ国）を予測・分類するシステムです
