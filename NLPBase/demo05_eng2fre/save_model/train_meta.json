@@ -1,0 +1,10 @@
+{
+  "saved_at": "2026-06-26 10:14:26",
+  "epoch": 5,
+  "batch_size": 64,
+  "learning_rate": 0.001,
+  "epochs_total": 5,
+  "latest_avg_loss": 0.3016051338074056,
+  "encoder_path": "C:\\workspace\\AI-practice\\NLPBase\\demo05_eng2fre\\save_model\\ai20_encoder_5.pth",
+  "decoder_path": "C:\\workspace\\AI-practice\\NLPBase\\demo05_eng2fre\\save_model\\ai20_decoder_5.pth"
+}
