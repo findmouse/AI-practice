@@ -119,5 +119,30 @@ Transformerモデルの基盤となるコアモジュール（5ファイル）�
 
 # Transformersを用いた各種NLPタスクの検証用ソースコードを追加（2026年6月29日）
 
-・関数名およびコーディングスタイルをプロジェクト規約に準拠するようリファクタリング
-・検証用テキストおよび一部のモデル（BERT等）を日本語対応モデルへ差し替え
+- 関数名およびコーディングスタイルをプロジェクト規約に準拠するようリファクタリング
+- 検証用テキストおよび一部のモデル（BERT等）を日本語対応モデルへ差し替え
+
+
+
+# Hugging Face Transformersを利用し（2026年6月30日）
+
+- テキスト分類（Sentiment Analysis）
+- 特徴抽出（Feature Extraction）
+- Fill-Mask（Masked Language Modeling）
+- 質問応答（Question Answering）
+- 要約（Summarization）
+- 固有表現抽出（Named Entity Recognition / NER）
+
+# 自然言語処理（NLP）および Hugging Face Transformers （2026年7月1日）
+
+現在は以下の内容を中心に学習・実装しています。
+
+- BERTによるテキスト分類
+- Masked Language Modeling（MLM）
+- Next Sentence Prediction（NSP）
+- Question Answering（QA）
+- データ前処理
+- トークナイズ
+- DataLoaderの作成
+- BERTモデルの学習・推論
+- モデルの保存・読み込み
