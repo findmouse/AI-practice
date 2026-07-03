@@ -69,17 +69,35 @@ def execute_question_answering() -> None:
     # 質問応答パイプラインの初期化（日本語対応モデルに変更）
     pipe = pipeline(
         task="question-answering",
-        model="uer/roberta-base-chinese-extractive-qa",
+        model="takehika/xlm-roberta-ja-jaquad-qa",
     )
 
-    # 文脈と質問の定義
-    context = "私は太郎です。システムエンジニアをしています。趣味はバスケットボールです。"
-    questions = ["私は誰ですか？", "私の職業は何ですか？", "私の趣味は何ですか？"]
+    context = """
+    太郎は東京に住んでいます。
+    彼はシステムエンジニアです。
+    趣味はバスケットボールです。
+    """
 
-    examples = [{"context": context, "question": question} for question in questions]
+    questions = [
+        "太郎はどこに住んでいますか？",
+        "太郎の職業は何ですか？",
+        "太郎の趣味は何ですか？",
+    ]
+
+    examples = [
+        {
+            "context": context,
+            "question": q
+        }
+        for q in questions
+    ]
+
     results = pipe(examples)
 
-    print(f"[INFO] 質問応答 実行結果: {results}")
+    for q, r in zip(questions, results):
+        print(q)
+        print(r["answer"])
+        # print(r["score"])
 
 
 def execute_summarization() -> None:
@@ -139,6 +157,6 @@ if __name__ == "__main__":
     # execute_text_classification()
     # execute_feature_extraction()
     # execute_fill_mask()
-    # execute_question_answering()
+    execute_question_answering()
     # execute_summarization()
-    execute_named_entity_recognition()
+    # execute_named_entity_recognition()
