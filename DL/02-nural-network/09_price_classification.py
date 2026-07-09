@@ -3,51 +3,41 @@ from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader
 import torch.nn as nn
 import torch.optim as optim
+from sklearn.model_selection import train_test_split
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
-from pathlib import Path
 
 
 # データセットの作成
 def create_dataset():
     # CSVファイルを読み込む
-    data_path = Path(__file__).resolve().parent / 'data' / 'phone_price.csv'
-    data = np.genfromtxt(data_path, delimiter=',', skip_header=1)
+    data = pd.read_csv('data/phone_price.csv')
 
     # 特徴量(X)とラベル(y)に分割
-    x, y = data[:, :-1], data[:, -1]
+    x, y = data.iloc[:, :-1], data.iloc[:, -1]
 
     # PyTorchで扱いやすいデータ型へ変換
     x = x.astype(np.float32)
     y = y.astype(np.int64)
 
     # 学習データと検証データへ分割
-    # 各クラスの割合を維持したまま分割する
-    rng = np.random.default_rng(88)
-    train_indices = []
-    test_indices = []
-
-    for class_label in np.unique(y):
-        class_indices = np.where(y == class_label)[0]
-        rng.shuffle(class_indices)
-        test_count = int(round(len(class_indices) * 0.2))
-        test_indices.extend(class_indices[:test_count])
-        train_indices.extend(class_indices[test_count:])
-
-    train_indices = np.array(train_indices)
-    test_indices = np.array(test_indices)
-    rng.shuffle(train_indices)
-    rng.shuffle(test_indices)
-
-    x_train, x_test = x[train_indices], x[test_indices]
-    y_train, y_test = y[train_indices], y[test_indices]
+    # stratify=y により各クラスの割合を維持したまま分割する
+    x_train, x_test, y_train, y_test = train_test_split(
+        x,
+        y,
+        test_size=0.2,
+        random_state=88,
+        stratify=y,
+        shuffle=True
+    )
 
     # 標準化に使用する平均値と標準偏差を学習データから計算
-    mean = x_train.mean(axis=0)
-    std = x_train.std(axis=0)
+    mean = x_train.mean()
+    std = x_train.std()
 
     # 標準偏差が0の特徴量によるゼロ除算を防ぐ
-    std[std == 0] = 1
+    std = std.replace(0, 1)
 
     # 学習データの統計量を利用して標準化
     x_train = (x_train - mean) / std
@@ -55,13 +45,13 @@ def create_dataset():
 
     # TensorDatasetへ変換
     train_dataset = TensorDataset(
-        torch.from_numpy(x_train.astype(np.float32)),
-        torch.tensor(y_train, dtype=torch.int64)
+        torch.from_numpy(x_train.values.astype(np.float32)),
+        torch.tensor(y_train.values, dtype=torch.int64)
     )
 
     val_dataset = TensorDataset(
-        torch.from_numpy(x_test.astype(np.float32)),
-        torch.tensor(y_test, dtype=torch.int64)
+        torch.from_numpy(x_test.values.astype(np.float32)),
+        torch.tensor(y_test.values, dtype=torch.int64)
     )
 
     # DataLoaderを作成
