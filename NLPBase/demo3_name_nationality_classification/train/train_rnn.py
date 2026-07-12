@@ -14,13 +14,13 @@ from tqdm import tqdm
 
 # 独自のユーティリティモジュールのパス追加
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from utils.NameClassDataset import NameClassDataset
-from utils.dataset import read_data
+# from utils.NameClassDataset import NameClassDataset
+from utils.dataset import *
 from models.rnn_model import My_RNN
 
 # ロギングの設定
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # ハイパーパラメータの設定
 LR = 1e-3
 EPOCHS = 1
@@ -32,17 +32,18 @@ def train_rnn() -> Tuple[List[float], int, List[float]]:
     また、結果をJSONファイル、モデルをバイナリファイルとして保存します。
     """
     # データの読み込み
-    data_path = '../data/name_classfication.txt'
-    if not os.path.exists(data_path):
-        logging.error(f"データファイルが見つかりません: {data_path}")
-        sys.exit(1)
-
-    my_list_x, my_list_y = read_data(data_path)
-    my_dataset = NameClassDataset(my_list_x, my_list_y)
-
+    # data_path = '../data/name_classfication.txt'
+    # if not os.path.exists(data_path):
+    #     logging.error(f"データファイルが見つかりません: {data_path}")
+    #     sys.exit(1)
+    #
+    # my_list_x, my_list_y = read_data(data_path)
+    # my_dataset = NameClassDataset(my_list_x, my_list_y)
+    my_dataloader = get_dataloader()
     # モデル、損失関数、最適化アルゴリズムの初期化
     # n_letters=57, hidden_size=128, output_size=18
     my_rnn = My_RNN(input_size=57, hidden_size=128, output_size=18)
+    # text{nn.CrossEntropyLoss()} = text{nn.LogSoftmax()} + text{nn.NLLLoss()}
     my_nll_loss = nn.NLLLoss()
     my_optim = optim.Adam(my_rnn.parameters(), lr=LR)
 
@@ -58,7 +59,7 @@ def train_rnn() -> Tuple[List[float], int, List[float]]:
 
     # 学習ループ
     for epoch_idx in range(EPOCHS):
-        my_dataloader = DataLoader(dataset=my_dataset, batch_size=1, shuffle=True)
+        # my_dataloader = DataLoader(dataset=my_dataset, batch_size=1, shuffle=True)
 
         for i, (x, y) in enumerate(tqdm(my_dataloader, desc=f"Epoch {epoch_idx + 1}/{EPOCHS}")):
             # 順伝播処理（batch_size=1のためx[0]を抽出）

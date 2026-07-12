@@ -1,4 +1,4 @@
-from keras.preprocessing import sequence
+from keras.utils import pad_sequences
 
 cutlen = 10
 
@@ -10,8 +10,8 @@ def padding(x_train):
     :param x_train: テキストのテンソル表現。形式: [[1, 32, 32, 61], [2, 54, 21, 7, 19]]
     :return: パディングおよび切り捨て処理後のテキストテンソル表現
     """
-    # sequence.pad_sequences を使用して長さを統一
-    return sequence.pad_sequences(x_train, cutlen, padding="pre", truncating="post")
+    # pad_sequences を使用して長さを統一（Keras 3: keras.utils.pad_sequences）
+    return pad_sequences(x_train, maxlen=cutlen, padding="pre", truncating="post")
 
 
 if __name__ == '__main__':

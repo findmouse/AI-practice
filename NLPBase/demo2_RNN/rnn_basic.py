@@ -8,7 +8,6 @@ RNN（Recurrent Neural Network）の基本動作確認サンプル
 - num_layersの影響
 - 出力テンソルの形状確認
 
-Author: Hao Ding
 """
 
 import torch
@@ -102,6 +101,6 @@ def rnn_multi_layer_example() -> None:
 
 
 if __name__ == "__main__":
-    # rnn_basic_example()
-    # rnn_sequence_length_example()
+    rnn_basic_example()
+    rnn_sequence_length_example()
     rnn_multi_layer_example()

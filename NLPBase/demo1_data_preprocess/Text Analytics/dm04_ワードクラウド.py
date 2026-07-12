@@ -7,7 +7,7 @@ from wordcloud import WordCloud
 from itertools import chain
 
 # GUIバックエンドの設定
-matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 
 
 def extract_adjectives(text):

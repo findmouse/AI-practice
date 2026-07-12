@@ -15,7 +15,7 @@ from tqdm import tqdm
 # 独自のユーティリティモジュールのパス追加
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.NameClassDataset import NameClassDataset
-from utils.dataset import read_data
+from utils.dataset import *
 from models.lstm_model import My_LSTM
 
 # ロギングの設定
@@ -32,14 +32,14 @@ def train_lstm() -> Tuple[List[float], int, List[float]]:
     また、結果をJSONファイル、モデルをバイナリファイルとして保存します。
     """
     # データの読み込み
-    data_path = '../data/name_classfication.txt'
-    if not os.path.exists(data_path):
-        logging.error(f"データファイルが見つかりません: {data_path}")
-        sys.exit(1)
-
-    my_list_x, my_list_y = read_data(data_path)
-    my_dataset = NameClassDataset(my_list_x, my_list_y)
-
+    # data_path = '../data/name_classfication.txt'
+    # if not os.path.exists(data_path):
+    #     logging.error(f"データファイルが見つかりません: {data_path}")
+    #     sys.exit(1)
+    #
+    # my_list_x, my_list_y = read_data(data_path)
+    # my_dataset = NameClassDataset(my_list_x, my_list_y)
+    my_dataloader = get_dataloader()
     # モデル、損失関数、最適化アルゴリズムの初期化
     # n_letters=57, hidden_size=128, output_size=18
     my_lstm = My_LSTM(input_size=57, hidden_size=128, output_size=18)
@@ -58,8 +58,6 @@ def train_lstm() -> Tuple[List[float], int, List[float]]:
 
     # 学習ループ
     for epoch_idx in range(EPOCHS):
-        my_dataloader = DataLoader(dataset=my_dataset, batch_size=1, shuffle=True)
-
         for i, (x, y) in enumerate(tqdm(my_dataloader, desc=f"Epoch {epoch_idx + 1}/{EPOCHS}")):
             # 初期隠れ状態(h0)とセル状態(c0)の生成
             h0, c0 = my_lstm.init_hidden()

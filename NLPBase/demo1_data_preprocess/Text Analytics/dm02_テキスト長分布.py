@@ -5,7 +5,7 @@ import pandas as pd
 import seaborn as sns
 
 # GUIバックエンドの設定
-matplotlib.use("TkAgg")
+# matplotlib.use("TkAgg")
 
 # 定数定義
 TRAIN_DATA_PATH = "../../assets/train.tsv"

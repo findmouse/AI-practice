@@ -53,19 +53,21 @@ def get_dataloader() -> None:
     """
     データローダーを作成し、最初のバッチのデータ形状を確認します。
     """
-    data_path = './data/name_classfication.txt'
+    data_path = '../data/name_classfication.txt'
     my_list_x, my_list_y = read_data(data_path)
 
     my_dataset = NameClassDataset(my_list_x, my_list_y)
     my_dataloader = DataLoader(dataset=my_dataset, batch_size=1, shuffle=True)
+    #
+    # logging.info(f"データローダーの総バッチ数 (len): {len(my_dataloader)}")
+    #
+    # # 最初の1バッチのみ確認
+    # for tensor_x, tensor_y in my_dataloader:
+    #     logging.info(f"入力テンソルの形状 (tensor_x.shape): {tensor_x.shape}")
+    #     logging.info(f"正解ラベル (tensor_y): {tensor_y}")
+    #     break
 
-    logging.info(f"データローダーの総バッチ数 (len): {len(my_dataloader)}")
-
-    # 最初の1バッチのみ確認
-    for tensor_x, tensor_y in my_dataloader:
-        logging.info(f"入力テンソルの形状 (tensor_x.shape): {tensor_x.shape}")
-        logging.info(f"正解ラベル (tensor_y): {tensor_y}")
-        break
+    return my_dataloader
 
 
 def read_json(data_path: str) -> Tuple[float, float, float]:
@@ -88,21 +90,21 @@ def read_json(data_path: str) -> Tuple[float, float, float]:
     return avg_loss, all_time, avg_acc
 
 
-def test_dataset() -> None:
-    """
-    データセットの動作確認用テスト関数です。
-    """
-    data_path = '../data/name_classfication.txt'
-    my_list_x, my_list_y = read_data(data_path)
-    my_dataset = NameClassDataset(my_list_x, my_list_y)
-
-    print(f"データセットの総件数: {len(my_dataset)}")
-    if len(my_dataset) > 0:
-        print(f"インデックス 0: {my_dataset[0]}")
-    if len(my_dataset) > 1:
-        print(f"インデックス 1: {my_dataset[1]}")
-    if len(my_dataset) > 2:
-        print(f"インデックス 2: {my_dataset[2]}")
+# def test_dataset() -> None:
+#     """
+#     データセットの動作確認用テスト関数です。
+#     """
+#     data_path = '../data/name_classfication.txt'
+#     my_list_x, my_list_y = read_data(data_path)
+#     my_dataset = NameClassDataset(my_list_x, my_list_y)
+#
+#     print(f"データセットの総件数: {len(my_dataset)}")
+#     if len(my_dataset) > 0:
+#         print(f"インデックス 0: {my_dataset[0]}")
+#     if len(my_dataset) > 1:
+#         print(f"インデックス 1: {my_dataset[1]}")
+#     if len(my_dataset) > 2:
+#         print(f"インデックス 2: {my_dataset[2]}")
 
 
 if __name__ == '__main__':

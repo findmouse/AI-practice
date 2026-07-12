@@ -18,7 +18,7 @@ def train_unsupervised_model() -> None:
         raise FileNotFoundError(f"訓練データが見つかりません: {TRAIN_DATA_PATH}")
 
     # 教師なし学習モードでモデルを訓練
-    model = fasttext.train_unsupervised(TRAIN_DATA_PATH)
+    model = fasttext.train_unsupervised(TRAIN_DATA_PATH, "cbow", dim=300, epoch=1, lr=0.1, thread=8)
 
     # 訓練済みモデルをローカル環境に保存
     model.save_model(MODEL_OUTPUT_PATH)
@@ -56,5 +56,5 @@ def verify_word_vectors() -> None:
 
 if __name__ == '__main__':
     # 実行したい処理のコメントアウトを解除して実行してください
-    # train_unsupervised_model()
+    train_unsupervised_model()
     verify_word_vectors()
