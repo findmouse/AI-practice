@@ -1,13 +1,13 @@
 import math
 from fractions import Fraction
 
-# 定义语料库
+# コーパスの定義
 sentences = [
     ['I', 'have', 'a', 'pen'],
     ['He', 'has', 'a', 'book'],
     ['She', 'has', 'a', 'cat']
 ]
-# 定义语言模型
+# 言語モデルの定義
 unigram = {}
 unigram_sum = 0
 for i in sentences:
@@ -22,7 +22,7 @@ for k in unigram.keys():
     unigram[k] = Fraction(unigram[k], unigram_sum)
 print(unigram)
 
-# 计算困惑度
+# パープレキシティの計算
 perplexity = 0
 for sentence in sentences:
     sentence_prob = 1
@@ -32,4 +32,4 @@ for sentence in sentences:
     perplexity += 2 ** temp
 
 perplexity = perplexity / len(sentences)
-print(f"困惑度为：{perplexity}")
+print(f"パープレキシティ: {perplexity}")

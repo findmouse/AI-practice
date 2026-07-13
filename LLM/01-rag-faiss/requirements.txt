@@ -1,4 +1,0 @@
-faiss-cpu
-datasets
-numpy
-tqdm
