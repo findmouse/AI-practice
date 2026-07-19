@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pet-practice"
+version = "0.1.0"
+description = "PET prompt-tuning practice project"
+requires-python = ">=3.8"
+dependencies = [
+    "datasets",
+    "numpy",
+    "rich",
+    "scikit-learn",
+    "torch",
+    "transformers",
+]
+
+[tool.setuptools]
+py-modules = ["ProjectConfig", "inference", "pet_bootstrap", "train"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["data_handle*", "utils*"]

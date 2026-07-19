@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# 学習によって生成されるモデル。必要なものだけ別途保存する。
+checkpoints/
