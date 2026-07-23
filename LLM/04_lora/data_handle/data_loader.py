@@ -14,9 +14,10 @@ pc = ProjectConfig()
 def get_data(tokenizer):
     dataset = load_dataset('text', data_files={'train': pc.train_path,
                                                'dev': pc.dev_path})
-    # partical函数的作用是将函数：convert_example里面的3个参数：tokenizer,max_source_seq_len,
-    # max_target_seq_len长度固定，也就是说函数:new_func在使用的时候，只需要传入函数：convert_example的其他的一个没有被固定的变量：example
-    # 就可以了，因为在这里，其他的参数已经被固定了。
+    # partial 関数の役割は、convert_example 関数の3つの引数 tokenizer、max_source_seq_len、
+    # max_target_seq_len を固定することである。つまり new_func を使う際には、
+    # convert_example の残りの固定されていない引数 example だけを渡せばよい。
+    # ここではその他の引数はすでに固定されているためである。
     new_func = partial(convert_example,
                        tokenizer=tokenizer,
                        max_source_seq_len=pc.max_source_seq_len,

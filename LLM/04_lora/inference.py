@@ -6,8 +6,8 @@ import torch
 import peft
 from transformers import AutoConfig, AutoTokenizer, AutoModel, PreTrainedModel
 
-# ChatGLM2 的远程模型代码基于 transformers 4.x，而 transformers 5.x
-# 要求旧模型没有初始化的 tied-weight 元数据在加载权重前存在。
+# ChatGLM2 のリモートモデルコードは transformers 4.x を前提としている。transformers 5.x では
+# 重みを読み込む前に、旧モデルの未初期化な tied-weight メタデータが存在している必要がある。
 if not hasattr(PreTrainedModel, "all_tied_weights_keys"):
     PreTrainedModel.all_tied_weights_keys = {}
 
@@ -21,7 +21,7 @@ pc = ProjectConfig()
 
 
 def patch_chatglm_tokenizer(tokenizer):
-    """让 ChatGLM 远程 tokenizer 兼容 transformers 5.x 的 padding_side 参数。"""
+    """ChatGLM のリモート tokenizer を transformers 5.x の padding_side 引数に対応させる。"""
     cls = tokenizer.__class__
     if getattr(cls, "_pad_compat_patched", False):
         return tokenizer
@@ -40,9 +40,10 @@ def patch_chatglm_tokenizer(tokenizer):
 
 def patch_chatglm_generation_mixin(model):
     """
-    ChatGLM2 的远程代码重写了 `_update_model_kwargs_for_generation`，其内部调用的
-    `_extract_past_from_model_output` 是老版 transformers GenerationMixin 的私有方法，
-    在 transformers 5.x 中已被移除，这里补回最小实现。
+    ChatGLM2 のリモートコードは `_update_model_kwargs_for_generation` を上書きしており、
+    その内部で呼ばれる `_extract_past_from_model_output` は旧版 transformers の
+    GenerationMixin にあった private メソッドで、transformers 5.x では削除されている。
+    ここで最小限の実装を補っている。
     """
     cls = type(model)
     if hasattr(cls, "_extract_past_from_model_output"):
@@ -68,7 +69,7 @@ def inference(
         sentence: str
 ):
     """
-    模型 inference 函数。
+    モデル推論関数。
 
     Args:
         instuction (str): _description_
@@ -87,8 +88,8 @@ def inference(
             input_ids=batch["input_ids"].to(device),
             max_new_tokens=max_new_tokens,
             temperature=0,
-            # ChatGLM2 的自定义 forward 仍以 tuple 形式读写 past_key_values，
-            # 与 transformers 5.x 新的 DynamicCache 对象不兼容，这里关闭缓存规避。
+            # ChatGLM2 のカスタム forward は past_key_values を依然として tuple 形式で読み書きしており、
+            # transformers 5.x の新しい DynamicCache オブジェクトと互換性がないため、ここではキャッシュを無効化して回避する。
             use_cache=False
         )
         out_text = tokenizer.decode(out[0])
@@ -108,12 +109,12 @@ if __name__ == '__main__':
     )
     tokenizer = patch_chatglm_tokenizer(tokenizer)
 
-    # model_path 下只保存了 LoRA adapter（见 common_utils.save_model），
-    # 因此需要先加载基础模型，再挂载 adapter。
+    # model_path 配下には LoRA adapter のみが保存されている（common_utils.save_model 参照）。
+    # そのため先にベースモデルを読み込み、その後 adapter を装着する必要がある。
     config = AutoConfig.from_pretrained(pc.pre_model, trust_remote_code=True)
     config.max_length = getattr(config, "max_length", config.seq_length)
-    # transformers 5.x 的 generate() 在构建 DynamicCache 时按新命名规范读取
-    # config.num_hidden_layers，而 ChatGLM2 的自定义 config 仍叫 num_layers。
+    # transformers 5.x の generate() は DynamicCache を構築する際、新しい命名規則に従って
+    # config.num_hidden_layers を読み取るが、ChatGLM2 のカスタム config では依然として num_layers という名前のままである。
     config.num_hidden_layers = getattr(config, "num_hidden_layers", config.num_layers)
 
     base_model = AutoModel.from_pretrained(
@@ -121,8 +122,8 @@ if __name__ == '__main__':
         config=config,
         trust_remote_code=True
     ).half().to(device)
-    # ChatGLM 的 __init__ 只是借用 config.max_length 来设置 max_sequence_length，
-    # 但 transformers 5.x 不允许生成参数残留在 model.config 上，加载完就清掉。
+    # ChatGLM の __init__ は config.max_length を借用して max_sequence_length を設定しているだけだが、
+    # transformers 5.x は生成パラメータが model.config に残ることを許さないため、読み込み後に削除する。
     if hasattr(base_model.config, "max_length"):
         del base_model.config.max_length
     base_model = patch_chatglm_generation_mixin(base_model)

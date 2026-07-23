@@ -1,5 +1,5 @@
 # coding:utf-8
-# 导入必备工具包
+# 必要なツールパッケージをインポートする
 import torch
 import torch.nn as nn
 import sys
@@ -12,7 +12,7 @@ from glm_config import ProjectConfig
 pc = ProjectConfig()
 
 
-# 将数据类型转换为：torch.float32
+# データ型を torch.float32 に変換する
 class CastOutputToFloat(nn.Sequential):
     def forward(self, x):
         return super().forward(x).to(torch.float32)
@@ -20,7 +20,7 @@ class CastOutputToFloat(nn.Sequential):
 
 def second2time(seconds: int):
     """
-    将秒转换成时分秒。
+    秒を「時:分:秒」形式に変換する。
 
     Args:
         seconds (int): _description_
@@ -32,12 +32,12 @@ def second2time(seconds: int):
 
 def save_model(model, cur_save_dir: str):
     """
-    存储当前模型。
+    現在のモデルを保存する。
     Args:
-        cur_save_path (str): 存储路径。
+        cur_save_path (str): 保存先パス。
     """
     if pc.use_lora:
-        # PEFT 模型只保存 LoRA adapter，避免复制和保存完整 6B 基础模型。
+        # PEFT モデルは LoRA adapter のみを保存し、完全な 6B ベースモデルの複製・保存を避ける。
         model.save_pretrained(cur_save_dir)
     else:
         model.save_pretrained(cur_save_dir)

@@ -16,7 +16,7 @@ from glm_config import *
 
 
 def encode_text(tokenizer, text):
-    """不经过 transformers 5.x 的 padding 流程进行纯文本编码。"""
+    """transformers 5.x の padding 処理を経由せず、テキストをそのままエンコードする。"""
     sentencepiece_tokenizer = getattr(tokenizer, "tokenizer", None)
     if sentencepiece_tokenizer is not None and hasattr(sentencepiece_tokenizer, "encode"):
         return sentencepiece_tokenizer.encode(text)
@@ -87,7 +87,7 @@ def convert_example(
             tokenized_output['input_ids'].append(np.array(input_ids))
             tokenized_output['labels'].append(np.array(labels))
         except TypeError as exc:
-            # transformers 5.x 与旧 ChatGLMTokenizer._pad 不兼容时直接失败，避免刷屏。
+            # transformers 5.x と旧 ChatGLMTokenizer._pad が非互換の場合は即座に失敗させ、ログの氾濫を防ぐ。
             if "padding_side" in str(exc):
                 raise RuntimeError(
                     "ChatGLMTokenizer 与当前 transformers 不兼容（_pad 缺少 padding_side）。"

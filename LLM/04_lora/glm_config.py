@@ -7,43 +7,43 @@ BASE_DIR = Path(__file__).resolve().parent
 
 class ProjectConfig(object):
     def __init__(self):
-        # 训练和推理所使用的计算设备：有可用 GPU 时使用第一张 GPU，否则使用 CPU。
+        # 学習・推論に使用する計算デバイス：利用可能な GPU があれば1枚目の GPU を使用し、なければ CPU を使用する。
         self.device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
-        # 使用标准 ChatGLM2-6B；训练时由 bitsandbytes 动态量化为 4-bit。
-        # 如果已经下载到本地，也可以改为完整模型目录的绝对路径。
+        # 標準の ChatGLM2-6B を使用する。学習時は bitsandbytes によって動的に 4-bit 量子化される。
+        # すでにローカルにダウンロード済みの場合は、完全なモデルディレクトリの絶対パスに変更してもよい。
         self.pre_model = "THUDM/chatglm2-6b"
-        # 训练数据集文件路径。
+        # 学習データセットファイルのパス。
         self.train_path = str(BASE_DIR / "data" / "mixed_train_dataset.jsonl")
-        # 验证数据集文件路径，用于训练过程中评估模型效果。
+        # 検証データセットファイルのパス。学習中のモデル評価に使用する。
         self.dev_path = str(BASE_DIR / "data" / "mixed_dev_dataset.jsonl")
-        # 是否启用 LoRA（低秩适配）方式进行参数高效微调。
+        # LoRA（低ランク適応）によるパラメータ効率の良いファインチューニングを有効にするかどうか。
         self.use_lora = True
-        # 标准 6B LoRA 不同时启用 P-Tuning。
+        # 標準の 6B LoRA では P-Tuning を同時に有効化しない。
         self.use_ptuning = False
-        # LoRA 低秩矩阵的秩；值越大可训练参数越多，模型拟也合能力和显存占用通常越高。
+        # LoRA 低ランク行列のランク。値が大きいほど学習可能パラメータが増え、モデルの表現力と VRAM 使用量も通常大きくなる。
         self.lora_rank = 8
-        # 单个训练批次包含的样本数量。
+        # 1つの学習バッチに含まれるサンプル数。
         self.batch_size = 1
-        # 完整遍历训练数据集的次数。
+        # 学習データセットを一通り走査する回数（エポック数）。
         self.epochs = 1
-        # 优化器的初始学习率，控制每次参数更新的步长。
+        # オプティマイザの初期学習率。パラメータ更新のステップ幅を制御する。
         self.learning_rate = 3e-5
-        # 权重衰减系数，用于 L2 正则化以缓解过拟合；0 表示不启用。
+        # 重み減衰係数。L2 正則化により過学習を緩和する。0 は無効を意味する。
         self.weight_decay = 0
-        # 学习率预热阶段占总训练步数的比例。
+        # 学習率のウォームアップ段階が総学習ステップ数に占める割合。
         self.warmup_ratio = 0.06
-        # 8GB 显存先使用较短序列；显存仍不足时可继续降为 96/48。
+        # VRAM 8GB ではまず短めのシーケンス長を使用する。それでも不足する場合は 96/48 までさらに下げてよい。
         self.max_source_seq_len = 128
         self.max_target_seq_len = 64
-        # 每隔多少个训练步记录一次损失等训练日志。
+        # 何ステップごとに損失などの学習ログを記録するか。
         self.logging_steps = 10
-        # 每隔多少个训练步保存一次模型检查点。
+        # 何ステップごとにモデルのチェックポイントを保存するか。
         self.save_freq = 200
-        # P-Tuning 使用的连续前缀 token 数量。
+        # P-Tuning で使用する連続プレフィックス token 数。
         self.pre_seq_len = 128
-        # 是否使用 MLP 对前缀向量进行投影；仅在启用 P-Tuning 时生效。
+        # プレフィックスベクトルを MLP で射影するかどうか。P-Tuning 有効時のみ効果がある。
         self.prefix_projection = False
-        # LoRA adapter、tokenizer 及训练检查点的保存目录。
+        # LoRA adapter、tokenizer、および学習チェックポイントの保存ディレクトリ。
         self.save_dir = str(BASE_DIR / "lora_checkpoints")
 
 

@@ -6,8 +6,8 @@ import sys
 from functools import partial
 import peft
 import torch
-# autocast是PyTorch中一种混合精度的技术，可在保持数值精度的情况下提高训练速度和减少显存占用。
-# 该方法混合精度训练，如果在CPU环境中不起任何作用
+# autocast は PyTorch の混合精度技術で、数値精度を保ちながら学習速度の向上と VRAM 使用量の削減を実現できる。
+# この混合精度学習は、CPU 環境では効果を発揮しない。
 from torch.cuda.amp import autocast as autocast
 from transformers import (
     AutoConfig,
@@ -28,7 +28,7 @@ pc = ProjectConfig()
 
 
 def patch_chatglm_tokenizer(tokenizer):
-    """让 ChatGLM 远程 tokenizer 兼容 transformers 5.x 的 padding_side 参数。"""
+    """ChatGLM のリモート tokenizer を transformers 5.x の padding_side 引数に対応させる。"""
     cls = tokenizer.__class__
     if getattr(cls, "_pad_compat_patched", False):
         return tokenizer
@@ -49,8 +49,8 @@ def model2train():
     if pc.device == 'cpu':
         raise RuntimeError("ChatGLM2-6B QLoRA 训练需要支持 CUDA 的 NVIDIA GPU。")
 
-    # ChatGLM2 的远程模型代码基于 transformers 4.x。transformers 5.x
-    # 要求旧模型没有初始化的 tied-weight 元数据在加载量化权重前存在。
+    # ChatGLM2 のリモートモデルコードは transformers 4.x を前提としている。transformers 5.x では
+    # 量子化重みを読み込む前に、旧モデルの未初期化な tied-weight メタデータが存在している必要がある。
     if not hasattr(PreTrainedModel, "all_tied_weights_keys"):
         PreTrainedModel.all_tied_weights_keys = {}
 
@@ -60,7 +60,7 @@ def model2train():
     config = AutoConfig.from_pretrained(pc.pre_model, trust_remote_code=True)
     config.max_length = getattr(config, "max_length", config.seq_length)
     config.use_cache = False
-    # RTX 2080 不支持 BF16，使用 NF4 4-bit 存储、FP16 计算和双重量化。
+    # RTX 2080 は BF16 に対応していないため、NF4 4-bit 格納・FP16 計算・二重量子化を使用する。
     quantization_config = BitsAndBytesConfig(
         load_in_4bit=True,
         bnb_4bit_quant_type="nf4",
@@ -68,8 +68,8 @@ def model2train():
         bnb_4bit_use_double_quant=True,
     )
 
-    # 从标准 ChatGLM2-6B 权重动态构建 bitsandbytes 4-bit 模型。
-    # 不能使用项目原来的 chatglm2-6b-int4，其 QuantizedLinear 不受 PEFT 支持。
+    # 標準の ChatGLM2-6B 重みから bitsandbytes 4-bit モデルを動的に構築する。
+    # プロジェクトに元々あった chatglm2-6b-int4 は QuantizedLinear が PEFT でサポートされないため使用できない。
     model = AutoModel.from_pretrained(pc.pre_model,
                                       config=config,
                                       trust_remote_code=True,
@@ -79,12 +79,12 @@ def model2train():
                                       low_cpu_mem_usage=True,
                                       )
 
-    # 冻结 4-bit 基础权重，并为梯度检查点和 LoRA 训练准备模型。
+    # 4-bit ベース重みを凍結し、gradient checkpointing と LoRA 学習のためにモデルを準備する。
     model = peft.prepare_model_for_kbit_training(
         model,
         use_gradient_checkpointing=True,
     )
-    # 不进行缓存，减少内存
+    # キャッシュを行わず、メモリ使用量を削減する
     model.config.use_cache = False
     peft_config = peft.LoraConfig(
         task_type=peft.TaskType.CAUSAL_LM,
@@ -97,7 +97,7 @@ def model2train():
     )
     model = peft.get_peft_model(model, peft_config)
 
-    # 4-bit 模型已由 device_map 放到 GPU，不能再次调用 model.to(...)。
+    # 4-bit モデルはすでに device_map によって GPU に配置されているため、再度 model.to(...) を呼んではいけない。
     model.train()
     model.print_trainable_parameters()
 
@@ -118,11 +118,11 @@ def model2train():
     # model.to(pc.device)
     #
     train_dataloader, dev_dataloader = get_data(tokenizer)
-    # 根据训练轮数计算最大训练步数，以便于scheduler动态调整lr
+    # エポック数から最大学習ステップ数を算出し、scheduler が動的に学習率を調整できるようにする
     num_update_steps_per_epoch = len(train_dataloader)
-    # 指定总的训练步数，它会被学习率调度器用来确定学习率的变化规律，确保学习率在整个训练过程中得以合理地调节
+    # 総学習ステップ数を指定する。学習率スケジューラはこれを用いて学習率の変化パターンを決定し、学習全体を通して学習率が適切に調整されるようにする
     max_train_steps = pc.epochs * num_update_steps_per_epoch
-    warm_steps = int(pc.warmup_ratio * max_train_steps)  # 预热阶段的训练步数
+    warm_steps = int(pc.warmup_ratio * max_train_steps)  # ウォームアップ段階の学習ステップ数
     lr_scheduler = get_scheduler(
         name='linear',
         optimizer=optimizer,
@@ -193,11 +193,11 @@ def model2train():
 
 def evaluate_model(model, dev_dataloader):
     """
-    在测试集上评估当前模型的训练效果。
+    テストセット上で現在のモデルの学習効果を評価する。
 
     Args:
-        model: 当前模型
-        data_loader: 测试集的dataloader
+        model: 現在のモデル
+        data_loader: テストセットの dataloader
     """
     model.eval()
     loss_list = []
