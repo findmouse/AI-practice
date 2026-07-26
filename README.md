@@ -1,2 +1,4 @@
-# AI-practice
-My AI practice projects
+# 学習進捗状況（2026/07/23~2026/07/26）
+
+docker+fastapi
+

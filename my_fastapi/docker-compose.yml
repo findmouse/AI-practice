@@ -1,0 +1,38 @@
+services:
+
+  fastapi:
+    build: .
+    container_name: fastapi-dev
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - .:/app
+
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_DB: sql_app
+
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+
+    container_name: mysql-dev
+
+    restart: always
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: sql_app
+
+    ports:
+      - "3306:3306"
+
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
