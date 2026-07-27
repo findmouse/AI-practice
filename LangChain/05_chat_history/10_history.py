@@ -12,7 +12,7 @@ from rich import print
 
 # 1. DeepSeek の大規模言語モデルをインスタンス化
 llm = ChatOpenAI(
-    model=DEEPSEEK_MODEL,  # DeepSeek V3 のモデル名
+    model=DEEPSEEK_MODEL,  # deepseek-v4-pro
     api_key=DEEPSEEK_API_KEY,
     base_url=DEEPSEEK_API_BASE,  # 重要：DeepSeek の API アドレスを指定
     streaming=True  # ストリーミング出力に対応

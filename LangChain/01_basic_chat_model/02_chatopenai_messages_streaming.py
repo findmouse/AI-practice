@@ -7,7 +7,7 @@ from config import DEEPSEEK_API_KEY, DEEPSEEK_API_BASE, DEEPSEEK_MODEL
 
 # ChatOpenAI インスタンスを初期化し、エンドポイントとモデルを DeepSeek に向ける
 chat = ChatOpenAI(
-    model=DEEPSEEK_MODEL,                          # DeepSeek V3 のモデル名
+    model=DEEPSEEK_MODEL,                          # deepseek-v4-pro
     api_key=DEEPSEEK_API_KEY,
     base_url=DEEPSEEK_API_BASE,                    # 重要：DeepSeek の API アドレスを指定
     streaming=True                                 # ストリーミング出力に対応
