@@ -1,2 +1,4 @@
-# AI-practice
-My AI practice projects
+# (2026/07/27)進捗状況
+
+langchainについての練習
+

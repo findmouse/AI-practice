@@ -137,6 +137,7 @@ celerybeat.pid
 # Environments
 .env
 .envrc
+LangChain/config.py
 .venv
 env/
 venv/
