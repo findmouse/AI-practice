@@ -43,6 +43,8 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
+.flashrank_cache/
+record_manager.db
 nosetests.xml
 coverage.xml
 *.cover
