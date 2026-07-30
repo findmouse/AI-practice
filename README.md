@@ -1,2 +1,3 @@
-# AI-practice
-My AI practice projects
+# (2026/07/30 進捗状況)
+
+feat(langchain1.2): 模型初期化の学習ノートを追加
