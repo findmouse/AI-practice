@@ -8,3 +8,7 @@ LangGraph のループ・再帰制御（MapReduce・静的/動的ループ・got
 # 2026/08/14~15進捗状況
 
 LangGraph の永続化機構（メモリ/SQL/PostgreSQL チェックポインター・状態履歴・エラー処理と修復・Replay・Fork・Store・Context）を学ぶ chapter03 のノートブック（01〜11）を追加
+
+# 2026/08/16進捗状況
+
+LangGraph の Human-in-the-Loop とツール呼び出し
