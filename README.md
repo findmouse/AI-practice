@@ -12,3 +12,7 @@ LangGraph の永続化機構（メモリ/SQL/PostgreSQL チェックポインタ
 # 2026/08/16進捗状況
 
 LangGraph の Human-in-the-Loop とツール呼び出し
+
+# 2026/08/16~17進捗状況
+
+LangGraph のストリーミングとサブグラフ・オーケストレーションパターン（Prompt Chaining・並列化・ルーター・Orchestrator-Worker・Evaluator-Optimizer）を学ぶ chapter05 のノートブックと、Human-in-the-Loop の hitl-demo サンプルを追加
